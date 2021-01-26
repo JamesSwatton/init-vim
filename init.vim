@@ -1,37 +1,49 @@
-" auto-intall vim-plug
+" ============= Vim-Plug ============== "{{{
+
+" auto-install vim-plug
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall | source $MYVIMRC
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
 call plug#begin(expand('~/.config/nvim/plugged'))
 
-" === looks and GUI stuff ===
+"}}}
 
-Plug 'ryanoasis/vim-devicons'
-Plug 'luochen1990/rainbow'
-Plug 'gregsexton/MatchTag'
-Plug 'Jorengarenar/vim-MvVis'
+" ================= looks and GUI stuff ================== "{{{
 
-" === functionality ===
+" Plug 'vim-airline/vim-airline'                          " airline status bar
+Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+Plug 'luochen1990/rainbow'                              " rainbow parenthesis
+Plug 'hzchirs/vim-material'                             " material color themes
+Plug 'gregsexton/MatchTag'                              " highlight matching html tags
+Plug 'Jorengarenar/vim-MvVis'                           " move visual selection
+"}}}
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'Yggdroot/indentLine'
-Plug 'tpope/vim-liquid'
-Plug 'tpope/vim-commentary'
-Plug 'mhinz/vim-startify'
-Plug 'tpope/vim-fugitive'
-Plug 'psliwka/vim-smoothie'
-Plug 'tpope/vim-eunuch'
-Plug 'machakann/vim-sandwich'
+" ================= Functionalities ================= "{{{
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}         " LSP and more
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " fzf itself
+Plug 'junegunn/fzf.vim'                                 " fuzzy search integration
+Plug 'SirVer/ultisnips'                                 " snippets manager
+Plug 'honza/vim-snippets'                               " actual snippets
+Plug 'Yggdroot/indentLine'                              " show indentation lines
+Plug 'tpope/vim-liquid'                                 " liquid language support
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
+Plug 'tpope/vim-commentary'                             " better commenting
+Plug 'mhinz/vim-startify'                               " cool start up screen
+Plug 'tpope/vim-fugitive'                               " git support
+Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
+Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
+Plug 'machakann/vim-sandwich'                           " make sandwiches
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 call plug#end()
 
-" === general config ===
+"}}}
 
-colorscheme desert
+" ==================== general config ======================== "{{{
+
 set mouse=a                                             " enable mouse scrolling
 set clipboard+=unnamedplus                              " use system clipboard by default
 set tabstop=4 softtabstop=4 shiftwidth=4 autoindent     " tab width
@@ -42,7 +54,7 @@ set encoding=utf-8                                      " text encoding
 set number                                              " enable numbers on the left
 set relativenumber                                      " current line is 0
 set title                                               " tab title as file name
-" set noshowmode                                          " dont show current mode below statusline
+set noshowmode                                          " dont show current mode below statusline
 set noshowcmd                                           " to get rid of display of last command
 set conceallevel=2                                      " set this so we wont break indentation plugin
 set splitright                                          " open vertical split to the right
@@ -63,11 +75,66 @@ set nocursorline
 set nocursorcolumn
 set scrolljump=5
 set lazyredraw
-set redrawtime=1000
+set redrawtime=10000
 set synmaxcol=180
 set re=1
 
-" === plugin config ===
+" required by coc
+set hidden
+set nobackup
+set nowritebackup
+set cmdheight=1
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+" Themeing
+colorscheme desert
+hi Comment gui=italic cterm=italic                      " italic comments
+" hi Search guibg=#b16286 guifg=#ebdbb2 gui=NONE          " search string highlight color
+" hi NonText guifg=bg                                     " mask ~ on empty lines
+hi clear CursorLineNr                                   " use the theme color for relative number
+hi CursorLineNr gui=bold                                " make relative number bold
+hi SpellBad guifg=NONE gui=bold,undercurl               " misspelled words
+
+" colors for git (especially the gutter)
+hi DiffAdd  guibg=#0f111a guifg=#43a047
+hi DiffChange guibg=#0f111a guifg=#fdd835
+hi DiffRemoved guibg=#0f111a guifg=#e53935
+
+" coc multi cursor highlight color
+hi CocCursorRange guibg=#b16286 guifg=#ebdbb2
+
+"}}}
+
+" ======================== Plugin Configurations ======================== "{{{
+
+"" built in plugins
+let loaded_netrw = 0                                    " diable netew
+let g:omni_sql_no_default_maps = 1                      " disable sql omni completion
+let g:loaded_python_provider = 0
+let g:loaded_perl_provider = 0
+let g:loaded_ruby_provider = 0
+let g:python3_host_prog = expand('/usr/bin/python3')
+
+" Airline
+" let g:airline_theme='material'
+" let g:airline_skip_empty_sections = 1
+" let g:airline_section_warning = ''
+" let g:airline_section_x=''
+" let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
+" let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
+" let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
+" let airline#extensions#coc#error_symbol = '✘:'
+" let airline#extensions#coc#warning_symbol = '⚠:'
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
+" let g:airline_symbols.linenr = ''
+" let g:airline_symbols.branch = '⎇ '
+" let g:airline_symbols.dirty= ''
 
 "" coc
 
@@ -101,7 +168,7 @@ let g:coc_global_extensions = [
 " indentLine
 let g:indentLine_char_list = ['▏', '¦', '┆', '┊']
 " let g:indentLine_setColors = 0
-let g:indentLine_setConceal = 0
+let g:indentLine_setConceal = 0                         " actually fix the annoying markdown links conversion
 let g:indentLine_fileTypeExclude = ['startify']
 
 "" startify
@@ -135,6 +202,9 @@ let g:startify_commands = [
 " rainbow brackets
 let g:rainbow_active = 1
 
+" semshi settings
+let g:semshi#error_sign	= v:false                       " let ms python lsp handle this
+
 "" FZF
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -147,7 +217,9 @@ let g:fzf_tags_command = 'ctags -R'
 let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea'"
 
-" === commands ===
+"}}}
+
+" ======================== Commands ============================= "{{{
 
 au BufEnter * set fo-=c fo-=r fo-=o                     " stop annoying auto commenting on new lines
 au FileType help wincmd L                               " open help in vertical split
@@ -205,7 +277,9 @@ command! -bang -nargs=? -complete=dir Files
 " advanced grep
 command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
-" === custom functions ==
+"}}}
+
+" ================== Custom Functions ===================== "{{{
 
 " advanced grep(faster with preview)
 function! RipgrepFzf(query, fullscreen)
@@ -236,8 +310,9 @@ function! s:show_documentation()
   endif
 endfunction
 
+"}}}
 
-" === custom mappings ===
+" ======================== Custom Mappings ====================== "{{{
 
 "" the essentials
 let mapleader=","
@@ -264,9 +339,9 @@ vnoremap p "_dP
 nnoremap x "_x
 
 " emulate windows copy, cut behavior
-vnoremap <LeftRelease> "+y<LeftRelease>
-vnoremap <C-c> "+y<CR>
-vnoremap <C-x> "+d<CR>
+" vnoremap <LeftRelease> "+y<LeftRelease>
+" vnoremap <C-c> "+y<CR>
+" vnoremap <C-x> "+d<CR>
 
 " switch between splits using ctrl + {h,j,k,l}
 inoremap <C-h> <C-\><C-N><C-w>h
@@ -345,3 +420,5 @@ nnoremap <F5> :CocCommand flutter.run<CR>
 " fugitive mappings
 nmap <leader>gd :Gdiffsplit<CR>
 nmap <leader>gb :Gblame<CR>
+
+"}}}
