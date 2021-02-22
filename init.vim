@@ -14,11 +14,11 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 " ================= looks and GUI stuff ================== "{{{
 
 " Plug 'vim-airline/vim-airline'                          " airline status bar
+Plug 'itchyny/lightline.vim'                            " lightline status bar
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
-Plug 'luochen1990/rainbow'                              " rainbow parenthesis
-Plug 'hzchirs/vim-material'                             " material color themes
-Plug 'gregsexton/MatchTag'                              " highlight matching html tags
-Plug 'Jorengarenar/vim-MvVis'                           " move visual selection
+Plug 'sheerun/vim-polyglot'                             " better syntax highlighting
+Plug 'ap/vim-css-color'                                 " show colors
+" Plug 'gregsexton/MatchTag'                              " highlight matching html tags
 "}}}
 
 " ================= Functionalities ================= "{{{
@@ -27,27 +27,34 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}         " LSP and more
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " fzf itself
 Plug 'junegunn/fzf.vim'                                 " fuzzy search integration
 Plug 'SirVer/ultisnips'                                 " snippets manager
-Plug 'honza/vim-snippets'                               " actual snippets
+" Plug 'honza/vim-snippets'                               " actual snippets
 Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'tpope/vim-liquid'                                 " liquid language support
+Plug 'leafOfTree/vim-svelte-plugin'                     " svelte language support
+Plug 'mattn/emmet-vim'                                  " emmet html/css abbreviation expantion
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
+Plug 'jiangmiao/auto-pairs'                             " auto complete brackets etc.
 Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'tpope/vim-fugitive'                               " git support
 Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
-Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
 Plug 'machakann/vim-sandwich'                           " make sandwiches
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'junegunn/vim-easy-align'                          " align stuff
+Plug 'vimwiki/vimwiki'                                  " a personal wiki
 call plug#end()
 
 "}}}
 
 " ==================== general config ======================== "{{{
 
+set nocompatible
+filetype plugin on
+syntax on
 set mouse=a                                             " enable mouse scrolling
 set clipboard+=unnamedplus                              " use system clipboard by default
-set tabstop=4 softtabstop=4 shiftwidth=4 autoindent     " tab width
+set tabstop=4 softtabstop=4 shiftwidth=4                " tab width
 set expandtab smarttab                                  " tab key actions
+set smartindent autoindent                              " indent
 set incsearch ignorecase smartcase hlsearch             " highlight text while searching
 set wrap breakindent                                    " wrap long lines to the width set by tw
 set encoding=utf-8                                      " text encoding
@@ -56,10 +63,11 @@ set relativenumber                                      " current line is 0
 set title                                               " tab title as file name
 set noshowmode                                          " dont show current mode below statusline
 set noshowcmd                                           " to get rid of display of last command
+
 set conceallevel=2                                      " set this so we wont break indentation plugin
 set splitright                                          " open vertical split to the right
 set splitbelow                                          " open horizontal split to the bottom
-set tw=90                                               " auto wrap lines that are longer than that
+set tw=80                                               " auto wrap lines that are longer than that
 set emoji                                               " enable emojis
 set history=1000                                        " history limit
 set backspace=indent,eol,start                          " sensible backspacing
@@ -91,9 +99,6 @@ set signcolumn=yes
 " Themeing
 colorscheme desert
 hi Comment gui=italic cterm=italic                      " italic comments
-" hi Search guibg=#b16286 guifg=#ebdbb2 gui=NONE          " search string highlight color
-" hi NonText guifg=bg                                     " mask ~ on empty lines
-hi clear CursorLineNr                                   " use the theme color for relative number
 hi CursorLineNr gui=bold                                " make relative number bold
 hi SpellBad guifg=NONE gui=bold,undercurl               " misspelled words
 
@@ -117,25 +122,6 @@ let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 let g:python3_host_prog = expand('/usr/bin/python3')
 
-" Airline
-" let g:airline_theme='material'
-" let g:airline_skip_empty_sections = 1
-" let g:airline_section_warning = ''
-" let g:airline_section_x=''
-" let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
-" let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
-" let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
-" let airline#extensions#coc#error_symbol = '✘:'
-" let airline#extensions#coc#warning_symbol = '⚠:'
-" if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-" endif
-" let g:airline_symbols.linenr = ''
-" let g:airline_symbols.branch = '⎇ '
-" let g:airline_symbols.dirty= ''
-
 "" coc
 
 " Navigate snippet placeholders using tab
@@ -154,6 +140,7 @@ let g:coc_global_extensions = [
             \'coc-yaml',
             \'coc-lists',
             \'coc-snippets',
+            \'coc-svelte',
             \'coc-python',
             \'coc-clangd',
             \'coc-prettier',
@@ -168,7 +155,7 @@ let g:coc_global_extensions = [
 " indentLine
 let g:indentLine_char_list = ['▏', '¦', '┆', '┊']
 " let g:indentLine_setColors = 0
-let g:indentLine_setConceal = 0                         " actually fix the annoying markdown links conversion
+" let g:indentLine_setConceal = 0                         " actually fix the annoying markdown links conversion
 let g:indentLine_fileTypeExclude = ['startify']
 
 "" startify
@@ -186,7 +173,8 @@ let g:startify_lists = [
 
 " bookmark examples
 let  g:startify_bookmarks =  [
-    \ {'v': '~/.config/nvim'},
+    \ {'v': '~/.config/nvim/init.vim'},
+    \ {'w': '~/vimwiki/index.wiki'},
     \ {'d': '~/.dotfiles' }
     \ ]
 
@@ -217,6 +205,20 @@ let g:fzf_tags_command = 'ctags -R'
 let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea'"
 
+"" Emmet
+let g:user_emmet_leader_key=','                         " redefine trigger key
+
+"" EasyAlign
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+"" Vimwiki
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'path_html': '~/vimwiki_html/'},
+            \{'path': '~/my-site/', 'path_html': '~/my-site_html/'}]
+
 "}}}
 
 " ======================== Commands ============================= "{{{
@@ -224,10 +226,10 @@ let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build
 au BufEnter * set fo-=c fo-=r fo-=o                     " stop annoying auto commenting on new lines
 au FileType help wincmd L                               " open help in vertical split
 au BufWritePre * :%s/\s\+$//e                           " remove trailing whitespaces before saving
-au CursorHold * silent call CocActionAsync('highlight') " highlight match on cursor hold
+" au CursorHold * silent call CocActionAsync('highlight') " highlight match on cursor hold
 
 " enable spell only if file type is normal text
-let spellable = ['markdown', 'gitcommit', 'txt', 'text', 'liquid', 'rst']
+let spellable = ['markdown', 'gitcommit', 'txt', 'text', 'liquid', 'vimwiki']
 autocmd BufEnter * if index(spellable, &ft) < 0 | set nospell | else | set spell | endif
 
 
@@ -316,8 +318,9 @@ endfunction
 
 "" the essentials
 let mapleader=","
+let maplocalleader="\\"
 nnoremap ; :
-nmap \ <leader>q
+" nmap \ <leader>q
 map <F6> :Startify <CR>
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>
 nmap <leader>q :bd<CR>
@@ -333,10 +336,10 @@ map <Enter> o<ESC>
 map <S-Enter> O<ESC>
 
 " use a different register for delete and paste
-nnoremap d "_d
-vnoremap d "_d
-vnoremap p "_dP
-nnoremap x "_x
+" nnoremap d "_d
+" vnoremap d "_d
+" vnoremap p "_dP
+" nnoremap x "_x
 
 " emulate windows copy, cut behavior
 " vnoremap <LeftRelease> "+y<LeftRelease>

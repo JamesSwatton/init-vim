@@ -4,6 +4,7 @@
   "coc.preferences.snippetStatusText": "Ⓢ ",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
+    "svelte",
     "html",
     "css",
     "json",
@@ -71,6 +72,9 @@
   "git.removedSign.text": "▌",
   "git.addedSign.text": "▌",
   "git.changedSign.text": "▌",
+
+  // Prettier settings
+  "prettier.tabWidth": 4,
 
   // other stuff (language specific)
   "python.autoComplete.addBrackets": true,
