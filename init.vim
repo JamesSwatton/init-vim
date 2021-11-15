@@ -31,6 +31,7 @@ Plug 'SirVer/ultisnips'                                 " snippets manager
 Plug 'Yggdroot/indentLine'                              " show indentation lines
 Plug 'tpope/vim-liquid'                                 " liquid language support
 Plug 'leafOfTree/vim-svelte-plugin'                     " svelte language support
+Plug 'lepture/vim-jinja'                                " nunjucks language support
 Plug 'mattn/emmet-vim'                                  " emmet html/css abbreviation expantion
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
