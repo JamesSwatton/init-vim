@@ -38,6 +38,7 @@ Plug 'jiangmiao/auto-pairs'                             " auto complete brackets
 Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'tpope/vim-fugitive'                               " git support
 Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
+Plug 'christoomey/vim-tmux-navigator'                   " seamless vim and tmux navigation
 Plug 'machakann/vim-sandwich'                           " make sandwiches
 Plug 'junegunn/vim-easy-align'                          " align stuff
 Plug 'vimwiki/vimwiki'                                  " a personal wiki
